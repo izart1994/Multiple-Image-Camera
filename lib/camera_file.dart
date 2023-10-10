@@ -30,13 +30,22 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   addImages(XFile image) {
     setState(() {
       imageFiles.add(image);
-      _animationController = AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 1500));
-      animation = Tween<double>(begin: 400, end: 1).animate(scaleAnimation =
-          CurvedAnimation(
-              parent: _animationController, curve: Curves.elasticOut))
-        ..addListener(() {});
-      _animationController.forward();
+      if(imageFiles.length == 5) {
+        for (int i = 0; i < imageFiles.length; i++) {
+          File file = File(imageFiles[i].path);
+          imageList.add(MediaModel.blob(
+              file, "", file.readAsBytesSync()));
+        }
+        Navigator.pop(context, imageList);
+      } else {
+        _animationController = AnimationController(
+            vsync: this, duration: const Duration(milliseconds: 1500));
+        animation = Tween<double>(begin: 400, end: 1).animate(scaleAnimation =
+            CurvedAnimation(
+                parent: _animationController, curve: Curves.elasticOut))
+          ..addListener(() {});
+        _animationController.forward();
+      }
     });
   }
 
@@ -140,19 +149,19 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                             height: 90,
                                             width: 60,
                                           ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  removeImage();
-                                                });
-                                              },
-                                              child: SvgPicture.asset(
-                                                  "assets/icons/closeOrange.svg"),
-                                            ),
-                                          )
+                                          // Positioned(
+                                          //   top: 0,
+                                          //   right: 0,
+                                          //   child: GestureDetector(
+                                          //     onTap: () {
+                                          //       setState(() {
+                                          //         removeImage();
+                                          //       });
+                                          //     },
+                                          //     child: SvgPicture.asset(
+                                          //         "assets/icons/closeOrange.svg"),
+                                          //   ),
+                                          // )
                                         ],
                                       ),
                                     ),
@@ -270,7 +279,26 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-              )
+              ),
+              Positioned(
+                left: MediaQuery.of(context).orientation == Orientation.portrait
+                    ? 320
+                    : null,
+                bottom: 10,
+                right: 0,
+                child: Row(
+                  children: [
+                    Text(
+                      imageFiles.length.toString(),
+                      style: TextStyle(fontSize: 32, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '/5',
+                      style: TextStyle(fontSize: 32, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ])));
   }
 
