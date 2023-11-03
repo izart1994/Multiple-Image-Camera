@@ -361,7 +361,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
           imageFiles.isNotEmpty
               ? GestureDetector(
                   onTap: () {
-                    for (int i = 0; i < imageFiles.length; i++) {
+                    for (int i = 4; i < imageFiles.length; i++) {
                       File file = File(imageFiles[i].path);
                       imageList.add(MediaModel.blob(
                           file, "", file.readAsBytesSync()));
